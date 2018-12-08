@@ -156,7 +156,7 @@ public class HuffProcessor {
 			throw new HuffException("reading bits failed");					// Failed if return -1
 		}
 		HuffNode root = readTreeHeader(in);									// Write this helper method
-		readCompressedBits(root,in,out);									// Write this helper method
+		readCompressedBits(root,in,out);									// Write this helper method // ERROR?
 		out.close();
 	}
 
@@ -192,7 +192,7 @@ public class HuffProcessor {
 				else {
 					current = current.myRight;
 				}
-				if (current.myValue == 1 || current.myValue == PSEUDO_EOF) {
+				if (current.myValue == 1) { // ERROR?  Deleted:  || current.myValue == PSEUDO_EOF
 					if (current.myValue == PSEUDO_EOF) {
 						break;
 					} 
