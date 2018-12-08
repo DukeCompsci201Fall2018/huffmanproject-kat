@@ -55,7 +55,7 @@ public class HuffProcessor {
 		out.close();
 	}
 
-	public int[] readForCounts(BitInputStream in, BitOutputStream out) {
+	private int[] readForCounts(BitInputStream in, BitOutputStream out) {
 		// WRITE HELPER METHOD TO DETERMINE FREQS PG 10
 		int[] store257 = new int[ALPH_SIZE + 1];
 		store257[PSEUDO_EOF] = 1;
@@ -68,7 +68,7 @@ public class HuffProcessor {
 		return store257;
 	}
 
-	public HuffNode makeTreeFromCounts(int[] counts) {
+	private HuffNode makeTreeFromCounts(int[] counts) {
 		// WRITE HELPER METHOD TO MAKE CODINGS FROM TRIE/TREE
 		PriorityQueue<HuffNode> pq = new PriorityQueue<HuffNode>();
 
@@ -87,14 +87,14 @@ public class HuffProcessor {
 		return root;
 	}
 
-	public String[] makeCodingsFromTree(HuffNode root) {
+	private String[] makeCodingsFromTree(HuffNode root) {
 		// WRITE HELPER METHOD TO MAKE CODINGS FROM TRIE/TREE
 		String[] encodings = new String[ALPH_SIZE + 1];
 		codingHelper(root, "", encodings);	// ANOTHER HELPER METHOD
 		return encodings;	
 	}
 
-	public void codingHelper(HuffNode root, String path, String[] encodings) {
+	private void codingHelper(HuffNode root, String path, String[] encodings) {
 		if (root.myValue == 1) {
 			encodings[root.myValue] = path;
 			return;
@@ -105,7 +105,7 @@ public class HuffProcessor {
 		}
 	}
 
-	public void writeHeader(HuffNode root, BitOutputStream out) {
+	private void writeHeader(HuffNode root, BitOutputStream out) {
 		if (root.myValue == 0) {
 			out.writeBits(1, 0);
 			writeHeader(root.myLeft,out);
@@ -117,7 +117,7 @@ public class HuffProcessor {
 		}
 	}
 
-	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
+	private void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
 		// WRITE HELPER METHOD
 		for (int a=0; a<codings.length; a++) {
 			String code = codings[a];
@@ -152,13 +152,15 @@ public class HuffProcessor {
 		if (bits != HUFF_TREE) {
 			throw new HuffException("illegal header starts with "+bits);	// From HuffException
 		}
-
+		if (bits == -1) {
+			throw new HuffException("reading bits failed");					// Failed if return -1
+		}
 		HuffNode root = readTreeHeader(in);									// Write this helper method
 		readCompressedBits(root,in,out);									// Write this helper method
 		out.close();
 	}
 
-	public HuffNode readTreeHeader(BitInputStream in) {
+	private HuffNode readTreeHeader(BitInputStream in) {
 		// WRITE HELPER HERE PG 8
 		int bitRead = in.readBits(1);										// Read a single bit
 		if (bitRead == -1) {												// If the bit is -1
@@ -175,7 +177,7 @@ public class HuffProcessor {
 		}
 	}
 
-	public void readCompressedBits(HuffNode root, BitInputStream in, BitOutputStream out) {
+	private void readCompressedBits(HuffNode root, BitInputStream in, BitOutputStream out) {
 		// WRITE HELPER HERE PG 9
 		HuffNode current = root;
 		while (true) {
@@ -200,10 +202,7 @@ public class HuffProcessor {
 					}
 				}
 			}
-
 		}
-
-
 	}
 }
 
