@@ -192,7 +192,7 @@ public class HuffProcessor {
 				else {
 					current = current.myRight;
 				}
-				if (current.myValue == 1) { // ERROR?  Deleted:  || current.myValue == PSEUDO_EOF
+				if (bits == 1) { // ERROR?  Deleted:  || current.myValue == PSEUDO_EOF
 					if (current.myValue == PSEUDO_EOF) {
 						break;
 					} 
