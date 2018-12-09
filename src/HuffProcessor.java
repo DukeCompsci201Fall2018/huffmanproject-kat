@@ -140,14 +140,6 @@ public class HuffProcessor {
 	 */
 	public void decompress(BitInputStream in, BitOutputStream out){
 
-		//		Just printing the contents in the input file to the output file:
-		//		while (true){
-		//			int val = in.readBits(BITS_PER_WORD);
-		//			if (val == -1) break;
-		//			out.writeBits(BITS_PER_WORD, val);
-		//		}
-		//		out.close();
-
 		int bits = in.readBits(BITS_PER_INT);								// Helper from BitInputStream
 		if (bits != HUFF_TREE) {
 			throw new HuffException("illegal header starts with "+bits);	// From HuffException
@@ -164,7 +156,7 @@ public class HuffProcessor {
 		// WRITE HELPER HERE PG 8
 		int bitRead = in.readBits(1);										// Read a single bit
 		if (bitRead == -1) {												// If the bit is -1
-			throw new HuffException("bad input");							// Throw exception
+			throw new HuffException("bad input: "+bitRead);							// Throw exception
 		}
 		if (bitRead ==  0) {												// If it's an inner node
 			HuffNode leftHN = readTreeHeader(in);							// Recursive call
