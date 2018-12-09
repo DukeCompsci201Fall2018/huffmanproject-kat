@@ -156,7 +156,7 @@ public class HuffProcessor {
 		// WRITE HELPER HERE PG 8
 		int bitRead = in.readBits(1);										// Read a single bit
 		if (bitRead == -1) {												// If the bit is -1
-			throw new HuffException("bad input: "+bitRead);							// Throw exception
+			throw new HuffException("bad input: "+bitRead);					// Throw exception
 		}
 		if (bitRead ==  0) {												// If it's an inner node
 			HuffNode leftHN = readTreeHeader(in);							// Recursive call
@@ -164,6 +164,9 @@ public class HuffProcessor {
 			return new HuffNode(0,0,leftHN,rightHN);						// Return new HN
 
 		} else {															// If 1 (leaf)
+			if (bitRead == PSEUDO_EOF) {
+				return new HuffNode(PSEUDO_EOF, 0, null, null);						// Return new HN
+			}
 			int value = in.readBits(BITS_PER_WORD + 1);						// Get value
 			return new HuffNode(value, 0, null, null);						// Return new HN
 		}
