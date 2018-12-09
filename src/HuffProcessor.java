@@ -186,11 +186,12 @@ public class HuffProcessor {
 				throw new HuffException("bad input, no PSEUDO_EOF");
 			} 
 			else {
-				if (bits == 0) {current = current.myLeft;} 
-				else {current = current.myRight;}
+				if (bits == 0 && current.myLeft != null) {current = current.myLeft;} 
+				if (bits == 1 && current.myRight != null) {current = current.myRight;}
 				
 				if (bits == 1) { // ERROR?  Deleted:  || current.myValue == PSEUDO_EOF
-					if (current.myValue == PSEUDO_EOF) break; 
+					if (current.myValue == PSEUDO_EOF) 
+						break; 
 					else {
 						out.writeBits(BITS_PER_WORD, current.myValue);
 						current = root;
